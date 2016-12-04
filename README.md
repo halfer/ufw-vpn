@@ -46,12 +46,23 @@ A manual firewall entry is necessary to allow any traffic out on your VPN device
 be added using `gufw` when the VPN is enabled; note that you may have to restart the gufw
 app, in order to refresh the list of interfaces.
 
-This rule works fine:
+This rule works fine for me, but your mileage may vary:
 
     From 10.4.0.0/16
     To anywhere
     Via interface tun0
     Going out
+
+Testing
+-------
+
+Once you've installed the rules from this script, it can be tested in this fashion:
+
+* Ensure that you can make a connection to your VPN whilst UFW is enabled. Do this
+  several times so that a good number of connection servers are tested.
+* Check that you can browse the web.
+* Disconnect your VPN manually.
+* Check that you can no longer browse the web.
 
 Enhancements
 ------------
