@@ -120,6 +120,7 @@ Example:
   chmod u+x add-rules.sh
   sudo ./add-rules.sh
 
+
 SYNTAX;
 }
 
