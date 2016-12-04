@@ -20,16 +20,21 @@ function getIgnoreIpList()
 	];
 }
 
-function getIpList($file)
+/**
+ * Finds IP addresses from `nslookup` output
+ *
+ * @param string $nslookupOutput
+ * @return array List of IP addresses in string format
+ */
+function getIpList($nslookupOutput)
 {
-	$data = file_get_contents($file);
-	$lines = explode("\n", $data);
+	$lines = explode("\n", $nslookupOutput);
+	$prefix = "Address:";
 
 	$ips = [];
 
 	foreach ($lines as $line)
 	{
-		$prefix = "Address:";
 		if (substr($line, 0, strlen($prefix)) == $prefix)
 		{
 			$matches = [];
@@ -53,7 +58,8 @@ function filterList(array $allow, array $deny)
 
 function getAllowedIpList()
 {
-	$allow = getIpList('earth-vpn-ips.log');
+	$data = file_get_contents('earth-vpn-ips.log');
+	$allow = getIpList($data);
 	$deny = getIgnoreIpList();
 	$ips = filterList($allow, $deny);
 
