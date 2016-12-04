@@ -7,6 +7,7 @@
  * To-do items
  *
  * Push to a public repo
+ * Validate output of getVpnIps, report an error if necessary
  * Add port restrictions to only allow OpenVPN through these rules?
  * Add shell comment explaining what the script does
  * Add shell comment about when it was generated
@@ -74,6 +75,28 @@ function generateDeleteCommands($ips)
 	return generateCommands($ips, "delete");
 }
 
+function processRequest($vpnAddress, $command)
+{
+    $commands = null;
+    switch ($command)
+    {
+        case 'add':
+            $commands = generateAllowCommands(getAllowedIpList($vpnAddress));
+            break;
+        case 'delete':
+            $commands = generateDeleteCommands(getAllowedIpList($vpnAddress));
+            break;
+        default:
+            echo "Not a valid command\n";
+    }
+
+    if ($commands)
+    {
+        echo "#!/bin/bash\n\n";
+        echo implode("\n", $commands) . "\n";
+    }
+}
+
 function printSyntax()
 {
 echo <<<SYNTAX
@@ -105,26 +128,7 @@ $command = isset($argv[2]) ? $argv[2] : '';
 
 if ($vpnAddress && $command)
 {
-    $ips = getAllowedIpList($vpnAddress);
-
-    $commands = null;
-    switch ($command)
-    {
-        case 'add':
-            $commands = generateAllowCommands($ips);
-            break;
-        case 'delete':
-            $commands = generateDeleteCommands($ips);
-            break;
-        default:
-            echo "Not a valid command\n";
-    }
-
-    if ($commands)
-    {
-        echo "#!/bin/bash\n\n";
-        echo implode("\n", $commands) . "\n";
-    }
+    processRequest($vpnAddress, $command);
 }
 else
 {
