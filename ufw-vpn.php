@@ -1,14 +1,13 @@
+#!/usr/bin/env php
 <?php
 
 /**
- * Script to create ufw rules to allow VPN connections
+ * Script to create UFW rules to allow VPN connections
  *
  * To-do items
  *
- * Add "add" and "delete" modes
  * Push to a public repo
- * Issue warnings if duplicates are detected
- * Create shell script rather than just list of commands to be pasted
+ * Add port restrictions to only allow OpenVPN through these rules?
  * Add shell comment explaining what the script does
  * Add shell comment about when it was generated
  * Add shell comment how many rules have been generated
@@ -24,8 +23,7 @@
  */
 function getIgnoreIpList()
 {
-	return [
-	];
+	return [];
 }
 
 /**
@@ -76,13 +74,60 @@ function generateDeleteCommands($ips)
 	return generateCommands($ips, "delete");
 }
 
-// @todo This needs validation
+function printSyntax()
+{
+echo <<<SYNTAX
+This script is used to generate UFW firewall setup/teardown scripts to
+allow VPN connections through.
+
+Syntax:
+
+  ufw-vpn.php <vpn-url> <add|delete>
+
+Where:
+
+  vpn-url is the address of your VPN, e.g. uk.myexamplevpn.net
+
+  "add" specifies that an add script is to be generated
+  "delete" specifies that a rule delete script is to be generated
+
+Example:
+
+  ufw-vpn.php uk.myexamplevpn.net add > add-rules.sh
+  chmod u+x add-rules.sh
+  sudo ./add-rules.sh
+
+SYNTAX;
+}
+
 $vpnAddress = isset($argv[1]) ? $argv[1] : '';
+$command = isset($argv[2]) ? $argv[2] : '';
 
-$ips = getAllowedIpList($vpnAddress);
-$commands = generateAllowCommands($ips);
-#$commands = generateDeleteCommands($ips);
+if ($vpnAddress && $command)
+{
+    $ips = getAllowedIpList($vpnAddress);
 
-echo "#!/bin/bash\n\n";
-echo implode("\n", $commands) . "\n";
+    $commands = null;
+    switch ($command)
+    {
+        case 'add':
+            $commands = generateAllowCommands($ips);
+            break;
+        case 'delete':
+            $commands = generateDeleteCommands($ips);
+            break;
+        default:
+            echo "Not a valid command\n";
+    }
+
+    if ($commands)
+    {
+        echo "#!/bin/bash\n\n";
+        echo implode("\n", $commands) . "\n";
+    }
+}
+else
+{
+    printSyntax();
+}
 
