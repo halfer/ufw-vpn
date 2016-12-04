@@ -6,60 +6,48 @@
  * To-do items
  *
  * Add "add" and "delete" modes
- * Add to a repo
  * Push to a public repo
- * Read from `nslookup` instead of a file
  * Issue warnings if duplicates are detected
  * Create shell script rather than just list of commands to be pasted
+ * Add shell comment explaining what the script does
+ * Add shell comment about when it was generated
+ * Add shell comment how many rules have been generated
  */
 
+/**
+ * IP addresses to ignore
+ *
+ * This was originally added to filter out local addresses parsed from nslookup;
+ * now I am using PHP's own DNS read feature, it is less necessary. However it
+ * may be useful to add an --ignore parameter in the future, so I will keep
+ * this for now.
+ */
 function getIgnoreIpList()
 {
 	return [
-		'127.0.1.1',
 	];
 }
 
 /**
- * Finds IP addresses from `nslookup` output
- *
- * @param string $nslookupOutput
- * @return array List of IP addresses in string format
+ * Removes a set of IP addresses from another set
  */
-function getIpList($nslookupOutput)
-{
-	$lines = explode("\n", $nslookupOutput);
-	$prefix = "Address:";
-
-	$ips = [];
-
-	foreach ($lines as $line)
-	{
-		if (substr($line, 0, strlen($prefix)) == $prefix)
-		{
-			$matches = [];
-			$number = '\d+';
-			$dot = '\.';
-			preg_match("#{$number}{$dot}{$number}{$dot}{$number}{$dot}{$number}#", $line, $matches);
-			if ($matches)
-			{
-				$ips[] = $matches[0];
-			}
-		}
-	}
-
-	return $ips;
-}
-
 function filterList(array $allow, array $deny)
 {
 	return array_diff($allow, $deny);
 }
 
-function getAllowedIpList()
+/**
+ * Effectively does an nslookup on the supplied address
+ */
+function getVpnIps($vpnAddress) {
+    $ips = gethostbynamel($vpnAddress);
+
+    return $ips;
+}
+
+function getAllowedIpList($vpnAddress)
 {
-	$data = file_get_contents('earth-vpn-ips.log');
-	$allow = getIpList($data);
+	$allow = getVpnIps($vpnAddress);
 	$deny = getIgnoreIpList();
 	$ips = filterList($allow, $deny);
 
@@ -88,7 +76,10 @@ function generateDeleteCommands($ips)
 	return generateCommands($ips, "delete");
 }
 
-$ips = getAllowedIpList();
+// @todo This needs validation
+$vpnAddress = isset($argv[1]) ? $argv[1] : '';
+
+$ips = getAllowedIpList($vpnAddress);
 $commands = generateAllowCommands($ips);
 #$commands = generateDeleteCommands($ips);
 
