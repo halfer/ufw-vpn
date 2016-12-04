@@ -6,9 +6,8 @@
  *
  * To-do items
  *
- * Push to a public repo
  * Validate output of getVpnIps, report an error if necessary
- * Add port restrictions to only allow OpenVPN through these rules?
+ * Allow the 443 port to be changed or removed using a console option
  * Add shell comment explaining what the script does
  * Add shell comment about when it was generated
  * Add shell comment how many rules have been generated
