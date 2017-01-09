@@ -46,6 +46,13 @@ function getVpnIps($vpnAddress) {
 function getAllowedIpList($vpnAddress)
 {
 	$allow = getVpnIps($vpnAddress);
+	if (!is_array($allow))
+	{
+		throw new \Exception(
+			sprintf("Could not fetch IP list from `%s`", $vpnAddress)
+		);
+	}
+
 	$deny = getIgnoreIpList();
 	$ips = filterList($allow, $deny);
 
@@ -128,7 +135,17 @@ $command = isset($argv[2]) ? $argv[2] : '';
 
 if ($vpnAddress && $command)
 {
-    processRequest($vpnAddress, $command);
+    try
+    {
+        processRequest($vpnAddress, $command);
+    }
+    catch (\Exception $e)
+    {
+        echo sprintf(
+            "Error: %s\n",
+            $e->getMessage()
+        );
+    }
 }
 else
 {
