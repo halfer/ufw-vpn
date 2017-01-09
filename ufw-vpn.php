@@ -23,7 +23,7 @@
  */
 function getIgnoreIpList()
 {
-	return [];
+    return [];
 }
 
 /**
@@ -31,7 +31,7 @@ function getIgnoreIpList()
  */
 function filterList(array $allow, array $deny)
 {
-	return array_diff($allow, $deny);
+    return array_diff($allow, $deny);
 }
 
 /**
@@ -45,40 +45,40 @@ function getVpnIps($vpnAddress) {
 
 function getAllowedIpList($vpnAddress)
 {
-	$allow = getVpnIps($vpnAddress);
-	if (!is_array($allow))
-	{
-		throw new \Exception(
-			sprintf("Could not fetch IP list from `%s`", $vpnAddress)
-		);
-	}
+    $allow = getVpnIps($vpnAddress);
+    if (!is_array($allow))
+    {
+        throw new \Exception(
+            sprintf("Could not fetch IP list from `%s`", $vpnAddress)
+        );
+    }
 
-	$deny = getIgnoreIpList();
-	$ips = filterList($allow, $deny);
+    $deny = getIgnoreIpList();
+    $ips = filterList($allow, $deny);
 
-	return $ips;
+    return $ips;
 }
 
 function generateCommands($ips, $subCommand = '')
 {
-	$commands = [];
-	foreach ($ips as $ip)
-	{
-		$command = "ufw {$subCommand} allow out to {$ip} port 443";
-		$commands[] = $command;
-	}
+    $commands = [];
+    foreach ($ips as $ip)
+    {
+        $command = "ufw {$subCommand} allow out to {$ip} port 443";
+        $commands[] = $command;
+    }
 
-	return $commands;
+    return $commands;
 }
 
 function generateAllowCommands($ips)
 {
-	return generateCommands($ips);
+    return generateCommands($ips);
 }
 
 function generateDeleteCommands($ips)
 {
-	return generateCommands($ips, "delete");
+    return generateCommands($ips, "delete");
 }
 
 function processRequest($vpnAddress, $command)
@@ -151,4 +151,3 @@ else
 {
     printSyntax();
 }
-
