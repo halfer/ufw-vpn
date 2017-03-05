@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
-        bootstrap="test/bootstrap.php"
+    bootstrap="test/bootstrap.php"
 >
-        <testsuites>
-                <testsuite name="unit">
-                        <directory>test/unit/</directory>
-		</testsuite>
-	</testsuites>
+    <testsuites>
+        <testsuite name="unit">
+            <directory>test/unit/</directory>
+            <directory>test/integration/</directory>
+        </testsuite>
+    </testsuites>
 </phpunit>
