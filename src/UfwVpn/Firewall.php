@@ -97,7 +97,7 @@ class Firewall
         return $regex;
     }
 
-    public function runUfwCommand()
+    protected function runUfwCommand()
     {
         $output = $return = null;
         exec($this->command, $output, $return);

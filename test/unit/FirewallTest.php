@@ -41,7 +41,9 @@ class FirewallTest extends \PHPUnit_Framework_TestCase
      */
     protected function createFirewallMock()
     {
-        return Mockery::Mock(Firewall::class)->makePartial();
+        return Mockery::Mock(Firewall::class)->
+            makePartial()->
+            shouldAllowMockingProtectedMethods();
     }
 
     /**
