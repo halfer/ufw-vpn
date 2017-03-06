@@ -35,6 +35,20 @@ class FirewallTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Checks that the error detection works OK
+     *
+     * @expectedException \Exception
+     */
+    public function testThrowsExceptionWhenErrorShown()
+    {
+        $firewall = $this->createFirewallMock();
+        $firewall->
+            shouldReceive('runUfwCommand')->
+            andReturn($this->getErrorFirewallConfig());
+        $firewall->getConfiguration();
+    }
+
+    /**
      * Returns a mocked firewall instance
      *
      * @return \Mockery\Mock|Firewall
@@ -77,5 +91,15 @@ Status: inactive
 CONFIG;
 
         return explode("\n", $config);
+    }
+
+    protected function getErrorFirewallConfig()
+    {
+$config = <<<CONFIG
+ERROR: In order to run this script, you need to be root
+CONFIG;
+
+        return explode("\n", $config);
+
     }
 }

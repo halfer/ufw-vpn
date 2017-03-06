@@ -34,13 +34,21 @@ class Firewall
     /**
      * Ensures the firewall status from the command output is active
      *
-     * @todo Change the exception to a specific one
+     * @todo Change both exceptions to specific ones
      *
      * @param array $output
      * @return string
      */
     protected function checkFirewallStatus(array $output)
     {
+        // Ensure we don't have an error
+        if (strpos($output[0], 'ERROR:') === 0)
+        {
+            throw new \Exception(
+                $output[0]
+            );
+        }
+
         $matches = null;
         preg_match('#Status: (.+)#', $output[0], $matches);
         $status = $matches ? $matches[1] : null;
