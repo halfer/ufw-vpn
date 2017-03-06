@@ -105,10 +105,17 @@ class Firewall
         return $regex;
     }
 
+    /**
+     * Get the status of the "ufw" firewall command
+     *
+     * I'm redirecting stderr here to capture ERROR output if necessary
+     *
+     * @return array
+     */
     protected function runUfwCommand()
     {
         $output = $return = null;
-        exec($this->command . ' status', $output, $return);
+        exec($this->command . ' status 2>&1', $output, $return);
 
         return $output;
     }
