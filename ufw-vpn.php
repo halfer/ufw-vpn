@@ -13,6 +13,11 @@
  * Add shell comment how many rules have been generated
  */
 
+use UfwVpn\Diff;
+
+$root = __DIR__;
+require_once $root . '/src/bootstrap.php';
+
 /**
  * IP addresses to ignore
  *
@@ -71,14 +76,41 @@ function generateCommands($ips, $subCommand = '')
     return $commands;
 }
 
+/**
+ * Returns an array of "allow" commands for a given set of IP addresses
+ *
+ * @param array $ips
+ * @return array
+ */
 function generateAllowCommands($ips)
 {
     return generateCommands($ips);
 }
 
+/**
+ * Returns an array of "delete" commands for a given set of IP addresses
+ *
+ * @param array $ips
+ * @return array
+ */
 function generateDeleteCommands($ips)
 {
     return generateCommands($ips, "delete");
+}
+
+/**
+ * Returns the smallest number of commands to bring the rules up to date
+ *
+ * @return array
+ */
+function generateDiffCommands($newIps, $oldIps)
+{
+    $diff = new Diff();
+    $changes = $diff->compare($oldIps, $newIps);
+    $allowCommands = generateAllowCommands($changes['add']);
+    $deleteCommands = generateDeleteCommands($changes['remove']);
+
+    return array_merge($allowCommands, $deleteCommands);
 }
 
 function processRequest($vpnAddress, $command)
@@ -92,6 +124,10 @@ function processRequest($vpnAddress, $command)
         case 'delete':
             $commands = generateDeleteCommands(getAllowedIpList($vpnAddress));
             break;
+        case 'diff':
+            $firewall = new \UfwVpn\Firewall();
+            $oldIps = $firewall->getConfiguration();
+            $commands = generateDiffCommands(getAllowedIpList($vpnAddress), $oldIps);
         default:
             echo "Not a valid command\n";
     }

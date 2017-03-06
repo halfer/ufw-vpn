@@ -100,7 +100,7 @@ class Firewall
     protected function runUfwCommand()
     {
         $output = $return = null;
-        exec($this->command, $output, $return);
+        exec($this->command . ' status', $output, $return);
 
         return $output;
     }
