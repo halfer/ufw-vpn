@@ -22,11 +22,17 @@ class Firewall
         $this->command = $command;
     }
 
-    public function getConfiguration()
+    /**
+     * Gets firewall config, either for all rules or rules for a specific port
+     *
+     * @param integer $port
+     * @return array
+     */
+    public function getConfiguration($port = null)
     {
         $output = $this->runUfwCommand();
         $this->checkFirewallStatus($output);
-        $rules = $this->getFirewallAllowRules($output);
+        $rules = $this->getFirewallAllowRules($output, $port);
 
         return $rules;
     }
@@ -68,9 +74,10 @@ class Firewall
      * @todo Change the exception to a specific one
      *
      * @param array $output
+     * @param integer|null $port
      * @return array
      */
-    protected function getFirewallAllowRules(array $output)
+    protected function getFirewallAllowRules(array $output, $port)
     {
         $matches = null;
         preg_match_all($this->getRuleRegex(), implode("\n", $output), $matches);
@@ -79,8 +86,11 @@ class Firewall
         $rules = [];
         foreach ($matches[1] as $ord => $ip)
         {
-            $port = $matches[2][$ord];
-            $rules[] = $ip . ':' . $port;
+            $thisPort = $matches[2][$ord];
+            if (!$port || $port === $thisPort)
+            {
+                $rules[] = $ip;
+            }
         }
 
         return $rules;

@@ -17,24 +17,14 @@ class RuleDiff
 
     public function getRuleDiff($newPort = 443)
     {
-        $oldAddresses = $this->getFirewall()->getConfiguration();
+        $oldAddresses = $this->getFirewall()->getConfiguration($newPort);
         $newAddresses = $this->getVpn()->getIpAddresses();
         $changes = $this->getDiff()->compare(
             $oldAddresses,
-            $this->addPort($newAddresses, $newPort)
+            $newAddresses
         );
 
         return $changes;
-    }
-
-    protected function addPort(array $ips, $port)
-    {
-        return array_map(
-            function($ip) use ($port) {
-                return $ip . ':' . $port;
-            },
-            $ips
-        );
     }
 
     protected function getFirewall()
