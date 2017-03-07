@@ -80,9 +80,7 @@ class Firewall
         foreach ($matches[1] as $ord => $ip)
         {
             $port = $matches[2][$ord];
-            $rules[] = [
-                'ip' => $ip, 'port' => $port,
-            ];
+            $rules[] = $ip . ':' . $port;
         }
 
         return $rules;

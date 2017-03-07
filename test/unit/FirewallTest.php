@@ -12,10 +12,7 @@ class FirewallTest extends \PHPUnit_Framework_TestCase
             andReturn($this->getExampleFirewallConfig());
         $rules = $firewall->getConfiguration();
         $this->assertEquals(
-            [
-                ['ip' => '1.2.3.4', 'port' => '443', ],
-                ['ip' => '2.3.4.5', 'port' => '443', ],
-            ],
+            ['1.2.3.4:443', '2.3.4.5:443', ],
             $rules
         );
     }
