@@ -41,6 +41,8 @@ function filterList(array $allow, array $deny)
 
 /**
  * Effectively does an nslookup on the supplied address
+ *
+ * @todo Replace this with the Vpn class
  */
 function getVpnIps($vpnAddress) {
     $ips = gethostbynamel($vpnAddress);
@@ -128,6 +130,7 @@ function processRequest($vpnAddress, $command)
             $firewall = new \UfwVpn\Firewall();
             $oldIps = $firewall->getConfiguration();
             $commands = generateDiffCommands(getAllowedIpList($vpnAddress), $oldIps);
+            break;
         default:
             echo "Not a valid command\n";
     }
