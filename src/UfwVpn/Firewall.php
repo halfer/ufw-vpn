@@ -86,7 +86,7 @@ class Firewall
         $rules = [];
         foreach ($matches[1] as $ord => $ip)
         {
-            $thisPort = $matches[2][$ord];
+            $thisPort = (int) $matches[2][$ord];
             if (!$port || $port === $thisPort)
             {
                 $rules[] = $ip;

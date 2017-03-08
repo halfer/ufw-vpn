@@ -6,13 +6,23 @@ class FirewallTest extends \PHPUnit_Framework_TestCase
 {
     public function testParsesUfwOutputCorrectly()
     {
+        $this->checkParser(null, ['1.2.3.4', '2.3.4.5', '3.4.5.6', ]);
+    }
+
+    public function testFiltersRulesByPort()
+    {
+        $this->checkParser(8443, ['3.4.5.6', ]);
+    }
+
+    protected function checkParser($port, array $expected)
+    {
         $firewall = $this->createFirewallMock();
         $firewall->
             shouldReceive('runUfwCommand')->
             andReturn($this->getExampleFirewallConfig());
-        $rules = $firewall->getConfiguration();
+        $rules = $firewall->getConfiguration($port);
         $this->assertEquals(
-            ['1.2.3.4:443', '2.3.4.5:443', ],
+            $expected,
             $rules
         );
     }
@@ -76,6 +86,7 @@ To                         Action      From
 Anywhere                   ALLOW OUT   10.4.0.0/16 on tun0
 1.2.3.4 443                ALLOW OUT   Anywhere
 2.3.4.5 443                ALLOW OUT   Anywhere
+3.4.5.6 8443               ALLOW OUT   Anywhere
 CONFIG;
 
         return explode("\n", $config);
