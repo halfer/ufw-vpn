@@ -138,6 +138,7 @@ function processRequest($vpnAddress, $command)
     if ($commands)
     {
         echo "#!/bin/bash\n\n";
+        sort($commands);
         echo implode("\n", $commands) . "\n";
     }
 }
