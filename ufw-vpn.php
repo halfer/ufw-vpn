@@ -151,13 +151,14 @@ allow VPN connections through.
 
 Syntax:
 
-  ufw-vpn.php <vpn-url> <add|delete>
+  ufw-vpn.php <vpn-url> <add|diff|delete>
 
 Where:
 
   vpn-url is the address of your VPN, e.g. uk.myexamplevpn.net
 
   "add" specifies that an add script is to be generated
+  "diff" specifies that a differencess script is to be generated
   "delete" specifies that a rule delete script is to be generated
 
 Example:
