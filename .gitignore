@@ -1,5 +1,6 @@
 # Ignore dependencies
 vendor/
+composer.phar
 
 # Ignore IDE
 /nbproject/
