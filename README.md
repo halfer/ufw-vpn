@@ -29,9 +29,20 @@ This will generate a list of rules of the form:
 
     ufw allow out to 1.2.3.4 port 443
 
+You can then add the rules in the newly created script:
+
+    chmod u+x add-rules.sh && sudo add-rules.sh
+
 If you elect to create a delete script, the rules will look like so:
 
     ufw delete allow out to 1.2.3.4 port 443
+
+You can also create a differences script, so that when your VPN provider updates their
+set of tunnelling nodes, you can just update your rules, rather than zapping them all
+and adding them all again. The command for that looks like
+
+    ufw-vpn.php uk.myexamplevpn.net diff > diff-rules.sh
+    chmod u+x diff-rules && sudo diff-rules
 
 Notes
 -----
@@ -41,6 +52,9 @@ means that you might get a different list if your provider has added new servers
 old ones. In that situation, the resulting script may fail to delete a rule that should be
 deleted, or will try to delete one that does not exist. You can check the list after deletion
 using `ufw` or the graphical interface `gufw`.
+
+It is usually best to use diff instead of delete anyway, unless you wish to delete
+these rules permanently.
 
 A manual firewall entry is necessary to allow any traffic out on your VPN device. This can
 be added using `gufw` when the VPN is enabled; note that you may have to restart the gufw
