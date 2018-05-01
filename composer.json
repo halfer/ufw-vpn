@@ -1,4 +1,7 @@
 {
+    "name": "halfer/ufw-vpn",
+    "description": "A script to generate UFW-compatible rules to allow a OpenVPN to work",
+    "license": "MIT",
     "require-dev": {
         "phpunit/phpunit": "4.8",
         "mockery/mockery": "0.9.*"
