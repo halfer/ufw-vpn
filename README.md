@@ -12,10 +12,10 @@ to make the initial VPN connection.
 It is written in PHP so you will need to have that installed. In Debian or Ubuntu distros, it
 is usually sufficient to install it thus:
 
-    sudo apt-get install php5
+    sudo apt-get install php7.0-cli
 
-It should work fine with most current versions of PHP5, and PHP7 should be fine as well. Feel
-free to report any bugs.
+You may need to tweak that to `php7-cli` or `php7.1-cli`, etc. It should work fine with most
+current versions of PHP7 and also PHP5. Feel free to report any bugs.
 
 Usage
 -----
