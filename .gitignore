@@ -4,3 +4,4 @@ composer.phar
 
 # Ignore IDE
 /nbproject/
+/.idea/
