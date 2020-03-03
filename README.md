@@ -44,6 +44,20 @@ and adding them all again. The command for that looks like
     ufw-vpn.php uk.myexamplevpn.net diff > diff-rules.sh
     chmod u+x diff-rules && sudo diff-rules
 
+Set up GUFW
+---
+
+If you want the rules to be enforced, outgoing connections should be changed to Reject (they
+are Allowed by default). This ensures that if the VPN connection drops, outbound traffic will
+be stopped until it is reconnected.
+
+For general security I also like to prevent incoming connections that are not explicitly allowed
+by a rule. See the screenshot:
+
+![GUFW config][1]
+
+[1]: docs/gufw-config.png
+
 Notes
 -----
 
