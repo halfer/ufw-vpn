@@ -3,7 +3,7 @@
     "description": "A script to generate UFW-compatible rules to allow a OpenVPN to work",
     "license": "MIT",
     "require-dev": {
-        "phpunit/phpunit": "4.8",
+        "phpunit/phpunit": "4.8.28",
         "mockery/mockery": "0.9.*"
     }
 }
