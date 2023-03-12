@@ -1,6 +1,8 @@
 <?php
 
-class DiffTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class DiffTest extends TestCase
 {
     public function testAddOneItem()
     {

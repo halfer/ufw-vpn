@@ -1,8 +1,9 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use UfwVpn\Firewall;
 
-class FirewallTest extends \PHPUnit_Framework_TestCase
+class FirewallTest extends TestCase
 {
     public function testParsesUfwOutputCorrectly()
     {
@@ -29,8 +30,6 @@ class FirewallTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Checks that the status test works OK
-     *
-     * @expectedException \Exception
      */
     public function testThrowsExceptionWhenFirewallDisabled()
     {
@@ -38,13 +37,12 @@ class FirewallTest extends \PHPUnit_Framework_TestCase
         $firewall->
             shouldReceive('runUfwCommand')->
             andReturn($this->getDisabledFirewallConfig());
+        $this->expectException(\Exception::class);
         $firewall->getConfiguration();
     }
 
     /**
      * Checks that the error detection works OK
-     *
-     * @expectedException \Exception
      */
     public function testThrowsExceptionWhenErrorShown()
     {
@@ -52,6 +50,7 @@ class FirewallTest extends \PHPUnit_Framework_TestCase
         $firewall->
             shouldReceive('runUfwCommand')->
             andReturn($this->getErrorFirewallConfig());
+        $this->expectException(\Exception::class);
         $firewall->getConfiguration();
     }
 

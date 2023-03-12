@@ -1,6 +1,8 @@
 <?php
 
-class RuleDiffTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class RuleDiffTest extends TestCase
 {
     public function testRuleDifferences()
     {
