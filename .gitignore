@@ -5,3 +5,6 @@ composer.phar
 # Ignore IDE
 /nbproject/
 /.idea/
+
+# Ignore test cache
+.phpunit.result.cache
