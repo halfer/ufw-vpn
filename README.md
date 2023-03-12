@@ -12,10 +12,10 @@ to make the initial VPN connection.
 It is written in PHP so you will need to have that installed. In Debian or Ubuntu distros, it
 is usually sufficient to install it thus:
 
-    sudo apt-get install php7.2-cli
+    sudo apt-get install php-cli
 
-You may need to tweak that to `php7-cli` or `php7.1-cli`, etc. It should work fine with most
-current versions of PHP7 and also legacy PHP5. Feel free to report any bugs.
+You may need to tweak that to `php8.2-cli` or `php8.1-cli`, etc. It should work fine with most
+current versions of PHP8 and also legacy PHP5/PHP7. Feel free to report any bugs.
 
 Usage
 -----
@@ -91,6 +91,13 @@ Once you've installed the rules from this script, it can be tested in this fashi
 * Check that you can browse the web.
 * Disconnect your VPN manually.
 * Check that you can no longer browse the web.
+
+Dependencies
+---
+
+The Composer libraries are only needed to run the tests. The first tagged release required
+PHP 7.1, and since then I've added a Dockerfile, so installing the tests is not dependent on
+the version of PHP on the host.
 
 Enhancements
 ------------
